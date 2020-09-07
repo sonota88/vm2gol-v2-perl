@@ -1,0 +1,10 @@
+// -*- mode: javascript -*-
+
+func f1() {
+  return 42;
+}
+
+func main() {
+  var c;
+  c = f1();
+}
