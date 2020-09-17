@@ -156,10 +156,6 @@ sub codegen_expr_mult {
 }
 
 sub codegen_expr_eq {
-    my $fn_arg_names = shift;
-    my $lvar_names = shift;
-    my $rest = shift;
-
     my $label_id = get_label_id();
 
     my $then_label = "then_$label_id";
@@ -180,10 +176,6 @@ sub codegen_expr_eq {
 }
 
 sub codegen_expr_neq {
-    my $fn_arg_names = shift;
-    my $lvar_names = shift;
-    my $rest = shift;
-
     my $label_id = get_label_id();
 
     my $then_label = "then_$label_id";
