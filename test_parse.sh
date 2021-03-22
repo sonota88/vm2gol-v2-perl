@@ -39,10 +39,10 @@ test_nn() {
 
   echo "test_${nn}"
 
-  local exp_vgt_file="${TEST_DIR}/parse_exp_${nn}.vgt.json"
+  local exp_vgt_file="${TEST_DIR}/parse/exp_${nn}.vgt.json"
 
   echo "  tok" >&2
-  cat ${TEST_DIR}/${nn}.vg.txt \
+  cat ${TEST_DIR}/parse/${nn}.vg.txt \
     | run_tokenizer \
     > $temp_tokens_file
   if [ $? -ne 0 ]; then
