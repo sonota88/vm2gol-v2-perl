@@ -31,9 +31,9 @@ test_nn() {
 
   echo "test_${nn}"
 
-  local exp_tokens_file="${TEST_DIR}/tokenize_exp_${nn}.txt"
+  local exp_tokens_file="${TEST_DIR}/tokenize/exp_${nn}.txt"
 
-  cat ${TEST_DIR}/tokenize_${nn}.vg.txt \
+  cat ${TEST_DIR}/tokenize/${nn}.vg.txt \
     | run \
     > $temp_tokens_file
   if [ $? -ne 0 ]; then
