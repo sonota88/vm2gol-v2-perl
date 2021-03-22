@@ -23,9 +23,9 @@ test_nn() {
 
   echo "test_${nn}"
 
-  local exp_tokens_file="${TEST_DIR}/json_${nn}.json"
+  local exp_tokens_file="${TEST_DIR}/json/${nn}.json"
 
-  cat ${TEST_DIR}/json_${nn}.json \
+  cat ${TEST_DIR}/json/${nn}.json \
     | perl test/test_json.pl \
     > $temp_json_file
   if [ $? -ne 0 ]; then
