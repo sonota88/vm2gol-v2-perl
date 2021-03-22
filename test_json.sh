@@ -33,7 +33,7 @@ test_nn() {
     return
   fi
 
-  ruby test/diff.rb $exp_tokens_file $temp_json_file
+  ruby test/diff.rb json $exp_tokens_file $temp_json_file
   if [ $? -ne 0 ]; then
     # meld $exp_tokens_file $temp_json_file &
 
