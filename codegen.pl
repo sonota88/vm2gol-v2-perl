@@ -110,7 +110,7 @@ sub to_asm_str {
     }
 }
 
-sub codegen_var {
+sub gen_var {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
     my $stmt_rest = shift;
@@ -118,11 +118,11 @@ sub codegen_var {
     print("  sub_sp 1\n");
 
     if (Utils::arr_size($stmt_rest) == 2) {
-        codegen_set($fn_arg_names, $lvar_names, $stmt_rest);
+        gen_set($fn_arg_names, $lvar_names, $stmt_rest);
     }
 }
 
-sub codegen_expr_push {
+sub gen_expr_push {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
     my $val = shift;
@@ -132,10 +132,10 @@ sub codegen_expr_push {
     $push_arg = to_asm_str($fn_arg_names, $lvar_names, $val);
     unless (defined($push_arg)) {
         if (Utils::is_arr($val)) {
-            codegen_expr($fn_arg_names, $lvar_names, $val);
+            gen_expr($fn_arg_names, $lvar_names, $val);
             $push_arg = "reg_a";
         } else {
-            p_e("codegen_expr_push", $val);
+            p_e("gen_expr_push", $val);
             die;
         }
     }
@@ -143,19 +143,19 @@ sub codegen_expr_push {
     printf("  push %s\n", $push_arg);
 }
 
-sub codegen_expr_add {
+sub gen_expr_add {
     printf("  pop reg_b\n");
     printf("  pop reg_a\n");
     printf("  add_ab\n");
 }
 
-sub codegen_expr_mult {
+sub gen_expr_mult {
     printf("  pop reg_b\n");
     printf("  pop reg_a\n");
     printf("  mult_ab\n");
 }
 
-sub codegen_expr_eq {
+sub gen_expr_eq {
     my $label_id = get_label_id();
 
     my $then_label = "then_$label_id";
@@ -175,7 +175,7 @@ sub codegen_expr_eq {
     printf("label %s\n", $end_label);
 }
 
-sub codegen_expr_neq {
+sub gen_expr_neq {
     my $label_id = get_label_id();
 
     my $then_label = "then_$label_id";
@@ -195,7 +195,7 @@ sub codegen_expr_neq {
     printf("label %s\n", $end_label);
 }
 
-sub codegen_expr {
+sub gen_expr {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
     my $expr = shift;
@@ -206,23 +206,23 @@ sub codegen_expr {
     my $term_l = $args->[0];
     my $term_r = $args->[1];
 
-    codegen_expr_push($fn_arg_names, $lvar_names, $term_l);
-    codegen_expr_push($fn_arg_names, $lvar_names, $term_r);
+    gen_expr_push($fn_arg_names, $lvar_names, $term_l);
+    gen_expr_push($fn_arg_names, $lvar_names, $term_r);
 
     if (Val::str_eq($op, "+")) {
-        codegen_expr_add();
+        gen_expr_add();
     } elsif (Val::str_eq($op, "*")) {
-        codegen_expr_mult();
+        gen_expr_mult();
     } elsif (Val::str_eq($op, "eq")) {
-        codegen_expr_eq();
+        gen_expr_eq();
     } elsif (Val::str_eq($op, "neq")) {
-        codegen_expr_neq();
+        gen_expr_neq();
     } else {
         die;
     }
 }
 
-sub codegen_call_push_fn_arg {
+sub gen_call_push_fn_arg {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
     my $fn_arg = shift;
@@ -231,14 +231,14 @@ sub codegen_call_push_fn_arg {
 
     $push_arg = to_asm_str($fn_arg_names, $lvar_names, $fn_arg);
     unless (defined($push_arg)) {
-        p_e("codegen_call_push_fn_arg", $fn_arg);
+        p_e("gen_call_push_fn_arg", $fn_arg);
         die;
     }
 
     printf("  push %s\n", $push_arg);
 }
 
-sub codegen_call {
+sub gen_call {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
     my $stmt_rest = shift;
@@ -247,21 +247,21 @@ sub codegen_call {
     my $fn_args = rest($stmt_rest);
 
     for my $fn_arg (reverse(@$fn_args)) {
-        codegen_call_push_fn_arg($fn_arg_names, $lvar_names, $fn_arg);
+        gen_call_push_fn_arg($fn_arg_names, $lvar_names, $fn_arg);
     }
 
-    codegen_vm_comment("call  $fn_name");
+    gen_vm_comment("call  $fn_name");
     printf("  call %s\n", $fn_name);
 
     printf("  add_sp %d\n", Utils::arr_size($fn_args));
 }
 
-sub codegen_call_set {
+sub gen_call_set {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
     my $stmt_rest = shift;
 
-    # p_e("codegen_call_set", $stmt_rest);
+    # p_e("gen_call_set", $stmt_rest);
 
     my $lvar_name = head($stmt_rest)->{"val"};
     my $fn_temp   = $stmt_rest->[1];
@@ -270,10 +270,10 @@ sub codegen_call_set {
     my $fn_args = rest($fn_temp);
 
     for my $fn_arg (reverse(@$fn_args)) {
-        codegen_call_push_fn_arg($fn_arg_names, $lvar_names, $fn_arg);
+        gen_call_push_fn_arg($fn_arg_names, $lvar_names, $fn_arg);
     }
 
-    codegen_vm_comment("call_set  " . $fn_name);
+    gen_vm_comment("call_set  " . $fn_name);
     printf("  call %s\n", $fn_name);
     printf("  add_sp %d\n", Utils::arr_size($fn_args));
 
@@ -281,12 +281,12 @@ sub codegen_call_set {
     printf("  cp reg_a %s\n", $ref);
 }
 
-sub codegen_set {
+sub gen_set {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
     my $rest = shift;
 
-    puts_fn("codegen_set");
+    puts_fn("gen_set");
 
     my $dest = $rest->[0];
     my $expr = $rest->[1];
@@ -296,7 +296,7 @@ sub codegen_set {
     $src_val = to_asm_str($fn_arg_names, $lvar_names, $expr);
     unless (defined($src_val)) {
         if (Utils::is_arr($expr)) {
-            codegen_expr($fn_arg_names, $lvar_names, $expr);
+            gen_expr($fn_arg_names, $lvar_names, $expr);
             $src_val = "reg_a";
         } elsif (Val::kind_eq($expr, "str")) {
             my $str = $expr->{"val"};
@@ -318,7 +318,7 @@ sub codegen_set {
                 die;
             }
         } else {
-            p_e("codegen_set", $expr);
+            p_e("gen_set", $expr);
             die;
         }
     }
@@ -346,7 +346,7 @@ sub codegen_set {
     }
 }
 
-sub codegen_return {
+sub gen_return {
     my $lvar_names = shift;
     my $stmt_rest = shift;
 
@@ -383,7 +383,7 @@ sub codegen_return {
     }
 }
 
-sub codegen_vm_comment {
+sub gen_vm_comment {
     my $cmt = shift;
 
     $cmt =~ s/ /~/g;
@@ -391,12 +391,12 @@ sub codegen_vm_comment {
     printf("  _cmt %s\n", $cmt);
 }
 
-sub codegen_while {
+sub gen_while {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
     my $stmt_rest = shift;
 
-    puts_fn("codegen_while");
+    puts_fn("gen_while");
 
     my $cond_expr = head($stmt_rest);
     my $body = $stmt_rest->[1];
@@ -410,7 +410,7 @@ sub codegen_while {
 
     printf("label %s\n", $label_begin);
 
-    codegen_expr($fn_arg_names, $lvar_names, $cond_expr);
+    gen_expr($fn_arg_names, $lvar_names, $cond_expr);
 
     printf("  set_reg_b 1\n");
     printf("  compare\n");
@@ -419,7 +419,7 @@ sub codegen_while {
     printf("  jump %s\n", $label_end);
     printf("label %s\n", $label_true);
 
-    codegen_stmts($fn_arg_names, $lvar_names, $body);
+    gen_stmts($fn_arg_names, $lvar_names, $body);
 
     printf("  jump %s\n", $label_begin);
 
@@ -427,12 +427,12 @@ sub codegen_while {
     printf("\n");
 }
 
-sub codegen_case {
+sub gen_case {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
     my $when_blocks = shift;
 
-    puts_fn("codegen_case");
+    puts_fn("gen_case");
 
     my $label_id = get_label_id();
     my $when_idx = -1;
@@ -460,7 +460,7 @@ sub codegen_case {
 
         if (Val::str_eq($cond_head, "eq")) {
             printf("  # -->> expr\n");
-            codegen_expr($fn_arg_names, $lvar_names, $cond);
+            gen_expr($fn_arg_names, $lvar_names, $cond);
             printf("  # <<-- expr\n");
 
             printf("  set_reg_b 1\n");
@@ -471,7 +471,7 @@ sub codegen_case {
 
             printf("label %s_%d\n", $label_when_head, $when_idx);
 
-            codegen_stmts($fn_arg_names, $lvar_names, $rest);
+            gen_stmts($fn_arg_names, $lvar_names, $rest);
 
             printf("  jump %s\n", $label_end);
             printf("label %s_%d\n", $label_end_when_head, $when_idx);
@@ -485,7 +485,7 @@ sub codegen_case {
     printf("\n");
 }
 
-sub codegen_stmt {
+sub gen_stmt {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
     my $stmt = shift;
@@ -493,29 +493,29 @@ sub codegen_stmt {
     my $stmt_head = head($stmt);
     my $stmt_rest = rest($stmt);
 
-    if    (Val::str_eq($stmt_head, "set"     )) { codegen_set(       $fn_arg_names, $lvar_names, $stmt_rest); }
-    elsif (Val::str_eq($stmt_head, "call"    )) { codegen_call(      $fn_arg_names, $lvar_names, $stmt_rest); }
-    elsif (Val::str_eq($stmt_head, "call_set")) { codegen_call_set(  $fn_arg_names, $lvar_names, $stmt_rest); }
-    elsif (Val::str_eq($stmt_head, "return"  )) { codegen_return(                   $lvar_names, $stmt_rest); }
-    elsif (Val::str_eq($stmt_head, "while"   )) { codegen_while(     $fn_arg_names, $lvar_names, $stmt_rest); }
-    elsif (Val::str_eq($stmt_head, "case"    )) { codegen_case(      $fn_arg_names, $lvar_names, $stmt_rest); }
-    elsif (Val::str_eq($stmt_head, "_cmt"    )) { codegen_vm_comment($stmt_rest->[0]->{"val"}); }
+    if    (Val::str_eq($stmt_head, "set"     )) { gen_set(       $fn_arg_names, $lvar_names, $stmt_rest); }
+    elsif (Val::str_eq($stmt_head, "call"    )) { gen_call(      $fn_arg_names, $lvar_names, $stmt_rest); }
+    elsif (Val::str_eq($stmt_head, "call_set")) { gen_call_set(  $fn_arg_names, $lvar_names, $stmt_rest); }
+    elsif (Val::str_eq($stmt_head, "return"  )) { gen_return(                   $lvar_names, $stmt_rest); }
+    elsif (Val::str_eq($stmt_head, "while"   )) { gen_while(     $fn_arg_names, $lvar_names, $stmt_rest); }
+    elsif (Val::str_eq($stmt_head, "case"    )) { gen_case(      $fn_arg_names, $lvar_names, $stmt_rest); }
+    elsif (Val::str_eq($stmt_head, "_cmt"    )) { gen_vm_comment($stmt_rest->[0]->{"val"}); }
     else {
         die;
     }
 }
 
-sub codegen_stmts {
+sub gen_stmts {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
     my $stmts = shift;
 
     for my $stmt (@$stmts) {
-        codegen_stmt($fn_arg_names, $lvar_names, $stmt);
+        gen_stmt($fn_arg_names, $lvar_names, $stmt);
     }
 }
 
-sub codegen_func_def {
+sub gen_func_def {
     my $rest = shift;
 
     my $fn_name = $rest->[0]->{"val"};
@@ -542,9 +542,9 @@ sub codegen_func_def {
         if (Val::str_eq(head($stmt), "var")) {
             my $var_name = head($stmt_rest)->{"val"};
             push(@$lvar_names, $var_name);
-            codegen_var($fn_arg_names, $lvar_names, $stmt_rest);
+            gen_var($fn_arg_names, $lvar_names, $stmt_rest);
         } else {
-            codegen_stmt($fn_arg_names, $lvar_names, $stmt);
+            gen_stmt($fn_arg_names, $lvar_names, $stmt);
         }
     }
 
@@ -554,17 +554,17 @@ sub codegen_func_def {
     print("  ret\n");
 }
 
-sub codegen_top_stmts {
+sub gen_top_stmts {
     my $top_stmts = shift;
 
-    puts_fn("codegen_top_stmts");
+    puts_fn("gen_top_stmts");
 
     for my $it (@$top_stmts) {
         my $stmt_head = head($it);
         my $stmt_rest = rest($it);
 
         if (Val::str_eq($stmt_head, "func") ) {
-            codegen_func_def($stmt_rest);
+            gen_func_def($stmt_rest);
         } else {
             die "not_yet_impl";
         }
@@ -582,4 +582,4 @@ print("  exit\n");
 
 my $top_stmts = rest($tree);
 
-codegen_top_stmts($top_stmts);
+gen_top_stmts($top_stmts);
