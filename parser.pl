@@ -364,7 +364,7 @@ sub parse_call {
 sub parse_call_set {
     puts_fn("parse_call_set");
 
-    # consume_kw("call_set");
+    consume_kw("call_set");
 
     my $t = peek(0);
     $pos++;
@@ -499,7 +499,7 @@ sub parse_stmt {
     elsif (Token::str_eq($t, "var"     )) { return parse_var();        }
     elsif (Token::str_eq($t, "set"     )) { return parse_set();        }
     elsif (Token::str_eq($t, "call"    )) { return parse_call();       }
-    # elsif (Token::str_eq($t, "call_set")) { return parse_call_set();   }
+    elsif (Token::str_eq($t, "call_set")) { return parse_call_set();   }
     elsif (Token::str_eq($t, "return"  )) { return parse_return();     }
     elsif (Token::str_eq($t, "while"   )) { return parse_while();      }
     elsif (Token::str_eq($t, "case"    )) { return parse_case();       }

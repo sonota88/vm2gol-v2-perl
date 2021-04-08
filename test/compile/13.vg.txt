@@ -6,5 +6,5 @@ func f1() {
 
 func main() {
   var c;
-  c = f1();
+  call_set c = f1();
 }
