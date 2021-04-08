@@ -500,10 +500,6 @@ sub parse_vm_comment {
 sub parse_stmt {
     my $t = peek(0);
 
-    if (Token::is($t, "sym", "}")) {
-        return -1;
-    }
-
     if    (Token::str_eq($t, "set"     )) { return parse_set();        }
     elsif (Token::str_eq($t, "call"    )) { return parse_call();       }
     elsif (Token::str_eq($t, "call_set")) { return parse_call_set();   }
@@ -524,12 +520,8 @@ sub parse_stmt {
 sub parse_stmts {
     my $stmts = [];
 
-    while (! is_end()) {
+    while (! Token::is(peek(0), "sym", "}")) {
         my $stmt = parse_stmt();
-        if ($stmt == -1) {
-            last;
-        }
-
         push(@$stmts, $stmt);
     }
 
