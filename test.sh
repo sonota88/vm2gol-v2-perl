@@ -32,10 +32,10 @@ test_all() {
     return
   fi
 
-  echo "==== step ===="
-  ./test_step.sh
+  echo "==== compile ===="
+  ./test_compile.sh
   if [ $? -ne 0 ]; then
-    ERRS="${ERRS},${nn}_step"
+    ERRS="${ERRS},${nn}_compile"
     return
   fi
 }

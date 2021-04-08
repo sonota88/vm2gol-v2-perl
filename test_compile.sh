@@ -43,10 +43,10 @@ test_nn() {
 
   echo "test_${nn}"
 
-  local exp_vga_file="${TEST_DIR}/step/exp_${nn}.vga.txt"
+  local exp_vga_file="${TEST_DIR}/compile/exp_${nn}.vga.txt"
 
   echo "  tok" >&2
-  cat ${TEST_DIR}/step/${nn}.vg.txt | run_tokenizer > $temp_tokens_file
+  cat ${TEST_DIR}/compile/${nn}.vg.txt | run_tokenizer > $temp_tokens_file
   if [ $? -ne 0 ]; then
     ERRS="${ERRS},${nn}_tokenize"
     return
@@ -95,7 +95,7 @@ done
 
 echo "----"
 if [ "$ERRS" = "" ]; then
-  echo "step: ok"
+  echo "compile: ok"
 else
   echo "FAILED: ${ERRS}"
   exit 1
