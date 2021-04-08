@@ -504,8 +504,7 @@ sub parse_stmt {
         return -1;
     }
 
-    if    (Token::str_eq($t, "func"    )) { return parse_func();       }
-    elsif (Token::str_eq($t, "set"     )) { return parse_set();        }
+    if    (Token::str_eq($t, "set"     )) { return parse_set();        }
     elsif (Token::str_eq($t, "call"    )) { return parse_call();       }
     elsif (Token::str_eq($t, "call_set")) { return parse_call_set();   }
     elsif (Token::str_eq($t, "return"  )) { return parse_return();     }
