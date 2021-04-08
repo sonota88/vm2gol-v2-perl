@@ -537,12 +537,30 @@ sub parse_stmts {
     return $stmts;
 }
 
+sub parse_top_stmt {
+    if (Token::is(peek(0), "kw", "func")) {
+        return parse_func();
+    } else {
+        die "unexpected token"
+    }
+}
+
+sub parse_top_stmts {
+    my $stmts = [];
+
+    while (! is_end()) {
+        push(@$stmts, parse_top_stmt());
+    }
+
+    return $stmts;
+}
+
 sub parse {
     my $top_stmts = [
         sval("stmts")
         ];
 
-    my $stmts = parse_stmts();
+    my $stmts = parse_top_stmts();
 
     for my $stmt (@$stmts) {
         push(@$top_stmts, $stmt);
