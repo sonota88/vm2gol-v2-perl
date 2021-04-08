@@ -353,7 +353,7 @@ sub gen_return {
     my $retval = head($stmt_rest);
 
     if (Val::kind_eq($retval, "int")) {
-        printf("  set_reg_a %s\n", $retval->{"val"});
+        printf("  cp %s reg_a\n", $retval->{"val"});
     } elsif (Val::kind_eq($retval, "str")) {
 
         my $str = $retval->{"val"};
