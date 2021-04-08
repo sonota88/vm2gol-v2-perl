@@ -20,7 +20,7 @@ build() {
 }
 
 run() {
-  perl vgtokenizer.pl
+  perl tokenizer.pl
 }
 
 test_nn() {

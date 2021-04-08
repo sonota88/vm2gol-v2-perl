@@ -20,11 +20,11 @@ build() {
 }
 
 run_tokenizer() {
-  perl vgtokenizer.pl
+  perl tokenizer.pl
 }
 
 run_parser() {
-  perl vgparser.pl
+  perl parser.pl
 }
 
 # --------------------------------

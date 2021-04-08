@@ -20,15 +20,15 @@ build() {
 }
 
 run_tokenizer() {
-  perl vgtokenizer.pl
+  perl tokenizer.pl
 }
 
 run_parser() {
-  perl vgparser.pl
+  perl parser.pl
 }
 
 run_codegen() {
-  perl vgcg.pl
+  perl cg.pl
 }
 
 # --------------------------------
