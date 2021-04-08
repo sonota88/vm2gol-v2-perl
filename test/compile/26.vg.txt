@@ -86,23 +86,23 @@ func count_alive(w, h, x, y) {
   var yt = y + -1;
   var yb = y +  1;
 
-  _cmt("★ xl の補正の直前");
+  _cmt("xl の補正の直前");
   xl = adjust_index(w, xl);
-  _cmt("★ xl の補正の直後");
+  _cmt("xl の補正の直後");
 
-  _cmt("★ xr の補正の直前");
+  _cmt("xr の補正の直前");
   xr = adjust_index(w, xr);
-  _cmt("★ xr の補正の直後");
+  _cmt("xr の補正の直後");
 
-  _cmt("★ yt の補正の直前");
+  _cmt("yt の補正の直前");
   yt = adjust_index(h, yt);
-  _cmt("★ yt の補正の直後");
+  _cmt("yt の補正の直後");
 
-  _cmt("★ yb の補正の直前");
+  _cmt("yb の補正の直前");
   yb = adjust_index(h, yb);
-  _cmt("★ yb の補正の直後");
+  _cmt("yb の補正の直後");
 
-  _cmt("★ 座標補正の直後");
+  _cmt("座標補正の直後");
 
   var tmp;
 
@@ -138,7 +138,7 @@ func count_alive(w, h, x, y) {
   tmp = vram_get(w, xr, yb);
   set count = count + tmp;
 
-  _cmt("★count_aliveの最後");
+  _cmt("count_aliveの最後");
 
   return count;
 }
@@ -157,18 +157,18 @@ func make_next_gen(w, h) {
     set x = 0;
     while (x != w) {
       count = count_alive(w, h, x, y);
-      _cmt("★ count_alive から戻った直後");
+      _cmt("count_alive から戻った直後");
 
-      _cmt("★次世代の生死決定の直前");
+      _cmt("次世代の生死決定の直前");
 
       current_val = vram_get(w, x, y);
 
       next_val = calc_next_gen(current_val, count);
 
-      _cmt("★次世代の生死決定の直後");
+      _cmt("次世代の生死決定の直後");
 
       call vram_set_buf(w, x, y, next_val);
-      _cmt("★ vram_set_buf から戻った直後");
+      _cmt("vram_set_buf から戻った直後");
 
       set x = x + 1;
     }
