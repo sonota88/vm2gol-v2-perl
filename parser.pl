@@ -556,7 +556,7 @@ sub parse_top_stmts {
 
 sub parse {
     my $top_stmts = [
-        sval("stmts")
+        sval("top_stmts")
         ];
 
     my $stmts = parse_top_stmts();
