@@ -165,7 +165,16 @@ sub parse_func {
     consume_sym(")");
 
     consume_sym("{");
-    my $stmts = parse_stmts();
+
+    my $stmts = [];
+    while (! Token::is(peek(0), "sym", "}")) {
+        if (Token::is(peek(0), "kw", "var")) {
+            push(@$stmts, parse_var());
+        } else {
+            push(@$stmts, parse_stmt());
+        }
+    }
+
     consume_sym("}");
 
     my $main_func = [
@@ -496,7 +505,6 @@ sub parse_stmt {
     }
 
     if    (Token::str_eq($t, "func"    )) { return parse_func();       }
-    elsif (Token::str_eq($t, "var"     )) { return parse_var();        }
     elsif (Token::str_eq($t, "set"     )) { return parse_set();        }
     elsif (Token::str_eq($t, "call"    )) { return parse_call();       }
     elsif (Token::str_eq($t, "call_set")) { return parse_call_set();   }
