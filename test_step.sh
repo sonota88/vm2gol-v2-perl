@@ -28,7 +28,7 @@ run_parser() {
 }
 
 run_codegen() {
-  perl cg.pl
+  perl codegen.pl
 }
 
 # --------------------------------
