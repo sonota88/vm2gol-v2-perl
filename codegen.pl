@@ -402,15 +402,11 @@ sub gen_case {
         my $cond = head($when_block);
         my $rest = rest($when_block);
 
-        my $cond_head = head($cond);
-        my $cond_rest = rest($cond);
-
         printf(
             "  # when_%d_%d: %s\n",
             $label_id, $when_idx, Json::list_to_json_line($cond)
             );
 
-        if (Val::str_eq($cond_head, "eq")) {
             printf("  # -->> expr\n");
             gen_expr($fn_arg_names, $lvar_names, $cond);
             printf("  # <<-- expr\n");
@@ -427,9 +423,6 @@ sub gen_case {
 
             printf("  jump %s\n", $label_end);
             printf("label %s_%d\n", $label_end_when_head, $when_idx);
-        } else {
-            die;
-        }
     }
 
     printf("label end_case_%d\n", $label_id);
