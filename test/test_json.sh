@@ -1,9 +1,17 @@
 #!/bin/bash
 
-print_project_dir() {
+print_this_dir() {
   local real_path="$(readlink --canonicalize "$0")"
   (
     cd "$(dirname "$real_path")"
+    pwd
+  )
+}
+
+print_project_dir() {
+  (
+    cd "$(print_this_dir)"
+    cd ..
     pwd
   )
 }

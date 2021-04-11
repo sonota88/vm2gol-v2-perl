@@ -1,9 +1,17 @@
 #!/bin/bash
 
-print_project_dir() {
+print_this_dir() {
   local real_path="$(readlink --canonicalize "$0")"
   (
     cd "$(dirname "$real_path")"
+    pwd
+  )
+}
+
+print_project_dir() {
+  (
+    cd "$(print_this_dir)"
+    cd ..
     pwd
   )
 }
@@ -13,68 +21,48 @@ export TEST_DIR="${PROJECT_DIR}/test"
 export TEMP_DIR="${PROJECT_DIR}/z_tmp"
 
 ERRS=""
-MAX_ID=1
+MAX_ID=2
 
 build() {
   :
 }
 
-run_lexer() {
+run() {
   perl lexer.pl
 }
-
-run_parser() {
-  perl parser.pl
-}
-
-# --------------------------------
 
 test_nn() {
   local nn="$1"; shift
   nn="${nn}"
 
   local temp_tokens_file="${TEMP_DIR}/test.tokens.txt"
-  local temp_vgt_file="${TEMP_DIR}/test.vgt.json"
-  local local_errs=""
 
   echo "test_${nn}"
 
-  local exp_vgt_file="${TEST_DIR}/parse/exp_${nn}.vgt.json"
+  local exp_tokens_file="${TEST_DIR}/lex/exp_${nn}.txt"
 
-  echo "  tok" >&2
-  cat ${TEST_DIR}/parse/${nn}.vg.txt \
-    | run_lexer \
+  cat ${TEST_DIR}/lex/${nn}.vg.txt \
+    | run \
     > $temp_tokens_file
   if [ $? -ne 0 ]; then
     ERRS="${ERRS},${nn}_lex"
-    local_errs="${local_errs},${nn}_lex"
     return
   fi
 
-  echo "  parse" >&2
-  cat $temp_tokens_file \
-    | run_parser \
-    > $temp_vgt_file
+  ruby test/diff.rb text $exp_tokens_file $temp_tokens_file
   if [ $? -ne 0 ]; then
-    ERRS="${ERRS},${nn}_parse"
-    local_errs="${local_errs},${nn}_parse"
+    # meld $exp_tokens_file $temp_tokens_file &
+
+    ERRS="${ERRS},${nn}_diff"
     return
-  fi
-
-  if [ "$local_errs" = "" ]; then
-    ruby test/diff.rb json $exp_vgt_file $temp_vgt_file
-    if [ $? -ne 0 ]; then
-      # meld $exp_vgt_file $temp_vga_file &
-
-      ERRS="${ERRS},${nn}_diff"
-      return
-    fi
   fi
 }
 
 # --------------------------------
 
 mkdir -p z_tmp
+
+build
 
 ns=
 
@@ -90,7 +78,7 @@ done
 
 echo "----"
 if [ "$ERRS" = "" ]; then
-  echo "parse: ok"
+  echo "lex: ok"
 else
   echo "FAILED: ${ERRS}"
   exit 1
