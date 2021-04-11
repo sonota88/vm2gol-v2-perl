@@ -229,22 +229,6 @@ sub gen_expr {
     }
 }
 
-sub gen_call_push_fn_arg {
-    my $fn_arg_names = shift;
-    my $lvar_names = shift;
-    my $fn_arg = shift;
-
-    my $push_arg;
-
-    $push_arg = to_asm_str($fn_arg_names, $lvar_names, $fn_arg);
-    unless (defined($push_arg)) {
-        p_e("gen_call_push_fn_arg", $fn_arg);
-        die;
-    }
-
-    printf("  cp %s reg_a\n", $push_arg);
-}
-
 sub gen_call {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
@@ -254,7 +238,7 @@ sub gen_call {
     my $fn_args = rest($stmt_rest);
 
     for my $fn_arg (reverse(@$fn_args)) {
-        gen_call_push_fn_arg($fn_arg_names, $lvar_names, $fn_arg);
+        gen_expr($fn_arg_names, $lvar_names, $fn_arg);
         printf("  push reg_a\n");
     }
 
@@ -278,7 +262,7 @@ sub gen_call_set {
     my $fn_args = rest($fn_temp);
 
     for my $fn_arg (reverse(@$fn_args)) {
-        gen_call_push_fn_arg($fn_arg_names, $lvar_names, $fn_arg);
+        gen_expr($fn_arg_names, $lvar_names, $fn_arg);
         printf("  push reg_a\n");
     }
 
