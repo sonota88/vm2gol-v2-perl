@@ -7,7 +7,7 @@ label main
 
   # 関数の処理本体
   sub_sp 1
-  cp 42 [bp-1]
+  cp 42 [bp:-1]
 
   cp bp sp
   pop bp

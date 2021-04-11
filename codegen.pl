@@ -84,7 +84,7 @@ sub to_lvar_ref {
     if ($i < 0) {
         die "lvar not found\n";
     }
-    return "[bp-" . ($i + 1) . "]";
+    return "[bp:-" . ($i + 1) . "]";
 }
 
 sub to_asm_str {

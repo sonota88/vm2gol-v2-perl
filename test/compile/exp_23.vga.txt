@@ -8,7 +8,7 @@ label main
   # 関数の処理本体
   sub_sp 1
   get_vram 0 reg_a
-  cp reg_a [bp-1]
+  cp reg_a [bp:-1]
   set_vram 1 42
 
   cp bp sp
