@@ -132,7 +132,7 @@ sub gen_expr_push {
     $push_arg = to_asm_str($fn_arg_names, $lvar_names, $val);
     unless (defined($push_arg)) {
         if (Utils::is_arr($val)) {
-            gen_expr($fn_arg_names, $lvar_names, $val);
+            _gen_expr_binary($fn_arg_names, $lvar_names, $val);
             $push_arg = "reg_a";
         } else {
             p_e("gen_expr_push", $val);
@@ -195,7 +195,7 @@ sub gen_expr_neq {
     printf("label %s\n", $end_label);
 }
 
-sub gen_expr {
+sub _gen_expr_binary {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
     my $expr = shift;
@@ -296,7 +296,7 @@ sub gen_set {
     $src_val = to_asm_str($fn_arg_names, $lvar_names, $expr);
     unless (defined($src_val)) {
         if (Utils::is_arr($expr)) {
-            gen_expr($fn_arg_names, $lvar_names, $expr);
+            _gen_expr_binary($fn_arg_names, $lvar_names, $expr);
             $src_val = "reg_a";
         } elsif (Val::kind_eq($expr, "str")) {
             my $str = $expr->{"val"};
@@ -410,7 +410,7 @@ sub gen_while {
 
     printf("label %s\n", $label_begin);
 
-    gen_expr($fn_arg_names, $lvar_names, $cond_expr);
+    _gen_expr_binary($fn_arg_names, $lvar_names, $cond_expr);
 
     printf("  set_reg_b 1\n");
     printf("  compare\n");
@@ -460,7 +460,7 @@ sub gen_case {
 
         if (Val::str_eq($cond_head, "eq")) {
             printf("  # -->> expr\n");
-            gen_expr($fn_arg_names, $lvar_names, $cond);
+            _gen_expr_binary($fn_arg_names, $lvar_names, $cond);
             printf("  # <<-- expr\n");
 
             printf("  set_reg_b 1\n");
