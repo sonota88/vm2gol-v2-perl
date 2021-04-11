@@ -361,35 +361,7 @@ sub gen_return {
 
     my $retval = head($stmt_rest);
 
-    if (Val::kind_eq($retval, "int")) {
-        printf("  cp %s reg_a\n", $retval->{"val"});
-    } elsif (Val::kind_eq($retval, "str")) {
-
-        my $str = $retval->{"val"};
-
-        if ($str =~ /^vram\[(.+?)\]/) {
-            my $vram_arg = $1;
-
-            if ($vram_arg =~ /^[0-9]+$/) {
-                die;
-            } else {
-                my $vram_ref = to_asm_str([], $lvar_names, sval($vram_arg));
-                if (defined($vram_ref)) {
-                    printf("  get_vram %s reg_a\n", $vram_ref);
-                } else {
-                    die;
-                }
-            }
-        } elsif (0 <= str_arr_index($lvar_names, $str)) {
-            my $ref = to_lvar_ref($lvar_names, $str);
-            printf("  cp %s reg_a\n", $ref);
-        } else {
-            die;
-        }
-
-    } else {
-        die;
-    }
+    gen_expr([], $lvar_names, $retval);
 }
 
 sub gen_vm_comment {
