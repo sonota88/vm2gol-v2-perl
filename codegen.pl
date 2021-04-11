@@ -140,7 +140,7 @@ sub gen_expr_push {
         }
     }
 
-    printf("  push %s\n", $push_arg);
+    printf("  cp %s reg_a\n", $push_arg);
 }
 
 sub gen_expr_add {
@@ -207,7 +207,9 @@ sub _gen_expr_binary {
     my $term_r = $args->[1];
 
     gen_expr_push($fn_arg_names, $lvar_names, $term_l);
+    printf("  push reg_a\n");
     gen_expr_push($fn_arg_names, $lvar_names, $term_r);
+    printf("  push reg_a\n");
 
     if (Val::str_eq($op, "+")) {
         gen_expr_add();
