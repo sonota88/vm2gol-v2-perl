@@ -1,3 +1,7 @@
+# coding: utf-8
+
+Encoding.default_internal = "utf-8"
+
 C_MINUS = "\e[0;31m" # red
 C_PLUS  = "\e[0;32m" # green
 C_AT    = "\e[0;34m" # blue
@@ -55,7 +59,7 @@ end
 
 def filter_asm(infile, outfile)
   lines =
-    remove_builtins(File.open(infile).each_line)
+    remove_builtins(File.open(infile, "r:utf-8").each_line)
     .map do |line|
       if /^(.+?) *# .*$/ =~ line
         $1 + "\n"
