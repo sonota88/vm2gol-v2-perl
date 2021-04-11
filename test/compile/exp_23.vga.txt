@@ -9,7 +9,8 @@ label main
   sub_sp 1
   get_vram 0 reg_a
   cp reg_a [bp:-1]
-  set_vram 1 42
+  cp 42 reg_a
+  set_vram 1 reg_a
 
   cp bp sp
   pop bp

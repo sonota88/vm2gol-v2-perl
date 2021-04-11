@@ -300,37 +300,8 @@ sub gen_set {
     my $dest = $rest->[0];
     my $expr = $rest->[1];
 
-    my $src_val;
-
-    $src_val = to_asm_str($fn_arg_names, $lvar_names, $expr);
-    unless (defined($src_val)) {
-        if (Utils::is_arr($expr)) {
-            _gen_expr_binary($fn_arg_names, $lvar_names, $expr);
-            $src_val = "reg_a";
-        } elsif (Val::kind_eq($expr, "str")) {
-            my $str = $expr->{"val"};
-            if ($str =~ /^vram\[(.+?)\]/) {
-                my $vram_arg = $1;
-                if ($vram_arg =~ /^[0-9]+$/) {
-                    printf("  get_vram %s reg_a\n", $vram_arg);
-                } else {
-                    my $vram_ref = to_asm_str($fn_arg_names, $lvar_names, sval($vram_arg));
-                    if (defined($vram_ref)) {
-                        printf("  get_vram %s reg_a\n", $vram_ref);
-                    } else {
-                        die;
-                    }
-                }
-                $src_val = "reg_a";
-            } else {
-                
-                die;
-            }
-        } else {
-            p_e("gen_set", $expr);
-            die;
-        }
-    }
+    gen_expr($fn_arg_names, $lvar_names, $expr);
+    my $src_val = "reg_a";
 
     my $dest_str = $dest->{"val"};
 
