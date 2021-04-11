@@ -122,27 +122,6 @@ sub gen_var {
     }
 }
 
-sub gen_expr_push {
-    my $fn_arg_names = shift;
-    my $lvar_names = shift;
-    my $val = shift;
-
-    my $push_arg;
-
-    $push_arg = to_asm_str($fn_arg_names, $lvar_names, $val);
-    unless (defined($push_arg)) {
-        if (Utils::is_arr($val)) {
-            _gen_expr_binary($fn_arg_names, $lvar_names, $val);
-            $push_arg = "reg_a";
-        } else {
-            p_e("gen_expr_push", $val);
-            die;
-        }
-    }
-
-    printf("  cp %s reg_a\n", $push_arg);
-}
-
 sub gen_expr_add {
     printf("  pop reg_b\n");
     printf("  pop reg_a\n");
@@ -206,9 +185,9 @@ sub _gen_expr_binary {
     my $term_l = $args->[0];
     my $term_r = $args->[1];
 
-    gen_expr_push($fn_arg_names, $lvar_names, $term_l);
+    gen_expr($fn_arg_names, $lvar_names, $term_l);
     printf("  push reg_a\n");
-    gen_expr_push($fn_arg_names, $lvar_names, $term_r);
+    gen_expr($fn_arg_names, $lvar_names, $term_r);
     printf("  push reg_a\n");
 
     if (Val::str_eq($op, "+")) {

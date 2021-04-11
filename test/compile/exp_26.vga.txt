@@ -14,14 +14,12 @@ label to_vi
   pop reg_b
   pop reg_a
   mult_ab
-  cp reg_a reg_a
   push reg_a
   cp [bp:3] reg_a
   push reg_a
   pop reg_b
   pop reg_a
   add_ab
-  cp reg_a reg_a
   push reg_a
   cp [bp:5] reg_a
   push reg_a
