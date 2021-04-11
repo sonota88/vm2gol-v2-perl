@@ -242,7 +242,7 @@ sub gen_call_push_fn_arg {
         die;
     }
 
-    printf("  push %s\n", $push_arg);
+    printf("  cp %s reg_a\n", $push_arg);
 }
 
 sub gen_call {
@@ -255,6 +255,7 @@ sub gen_call {
 
     for my $fn_arg (reverse(@$fn_args)) {
         gen_call_push_fn_arg($fn_arg_names, $lvar_names, $fn_arg);
+        printf("  push reg_a\n");
     }
 
     gen_vm_comment("call  $fn_name");
@@ -278,6 +279,7 @@ sub gen_call_set {
 
     for my $fn_arg (reverse(@$fn_args)) {
         gen_call_push_fn_arg($fn_arg_names, $lvar_names, $fn_arg);
+        printf("  push reg_a\n");
     }
 
     gen_vm_comment("call_set  " . $fn_name);
