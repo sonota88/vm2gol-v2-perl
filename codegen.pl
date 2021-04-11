@@ -224,6 +224,32 @@ sub _gen_expr_binary {
     }
 }
 
+sub gen_expr {
+    my $fn_arg_names = shift;
+    my $lvar_names = shift;
+    my $expr = shift;
+
+    if (Utils::is_arr($expr)) {
+        _gen_expr_binary($fn_arg_names, $lvar_names, $expr);
+    } elsif (Val::kind_eq($expr, "int")) {
+        my $n = $expr->{"val"};
+        printf("  cp %d reg_a\n", $n);
+    } elsif (Val::kind_eq($expr, "str")) {
+        my $str = $expr->{"val"};
+        if (0 <= str_arr_index($fn_arg_names, $str)) {
+            my $cp_src = to_fn_arg_ref($fn_arg_names, $str);
+            printf("  cp %s reg_a\n", $cp_src);
+        } elsif (0 <= str_arr_index($lvar_names, $str)) {
+            my $cp_src = to_lvar_ref($lvar_names, $str);
+            printf("  cp %s reg_a\n", $cp_src);
+        } else {
+            die;
+        }
+    } else {
+        die;
+    }
+}
+
 sub gen_call_push_fn_arg {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
