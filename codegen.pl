@@ -73,7 +73,7 @@ sub to_fn_arg_ref {
     if ($i < 0) {
         die "fn arg not found\n";
     }
-    return "[bp+" . ($i + 2) . "]";
+    return "[bp:" . ($i + 2) . "]";
 }
 
 sub to_lvar_ref {
