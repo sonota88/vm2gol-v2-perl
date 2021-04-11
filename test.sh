@@ -18,10 +18,10 @@ test_all() {
     return
   fi
 
-  echo "==== tokenize ===="
-  ./test_tokenize.sh
+  echo "==== lex ===="
+  ./test_lex.sh
   if [ $? -ne 0 ]; then
-    ERRS="${ERRS},${nn}_tokenize"
+    ERRS="${ERRS},${nn}_lex"
     return
   fi
 

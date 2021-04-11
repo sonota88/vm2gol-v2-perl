@@ -19,8 +19,8 @@ build() {
   :
 }
 
-run_tokenizer() {
-  perl tokenizer.pl
+run_lexer() {
+  perl lexer.pl
 }
 
 run_parser() {
@@ -46,9 +46,9 @@ test_nn() {
   local exp_vga_file="${TEST_DIR}/compile/exp_${nn}.vga.txt"
 
   echo "  tok" >&2
-  cat ${TEST_DIR}/compile/${nn}.vg.txt | run_tokenizer > $temp_tokens_file
+  cat ${TEST_DIR}/compile/${nn}.vg.txt | run_lexer > $temp_tokens_file
   if [ $? -ne 0 ]; then
-    ERRS="${ERRS},${nn}_tokenize"
+    ERRS="${ERRS},${nn}_lex"
     return
   fi
 

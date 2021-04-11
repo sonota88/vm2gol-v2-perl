@@ -20,7 +20,7 @@ build() {
 }
 
 run() {
-  perl tokenizer.pl
+  perl lexer.pl
 }
 
 test_nn() {
@@ -31,13 +31,13 @@ test_nn() {
 
   echo "test_${nn}"
 
-  local exp_tokens_file="${TEST_DIR}/tokenize/exp_${nn}.txt"
+  local exp_tokens_file="${TEST_DIR}/lex/exp_${nn}.txt"
 
-  cat ${TEST_DIR}/tokenize/${nn}.vg.txt \
+  cat ${TEST_DIR}/lex/${nn}.vg.txt \
     | run \
     > $temp_tokens_file
   if [ $? -ne 0 ]; then
-    ERRS="${ERRS},${nn}_tokenize"
+    ERRS="${ERRS},${nn}_lex"
     return
   fi
 
@@ -70,7 +70,7 @@ done
 
 echo "----"
 if [ "$ERRS" = "" ]; then
-  echo "tokenize: ok"
+  echo "lex: ok"
 else
   echo "FAILED: ${ERRS}"
   exit 1

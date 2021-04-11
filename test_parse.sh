@@ -19,8 +19,8 @@ build() {
   :
 }
 
-run_tokenizer() {
-  perl tokenizer.pl
+run_lexer() {
+  perl lexer.pl
 }
 
 run_parser() {
@@ -43,11 +43,11 @@ test_nn() {
 
   echo "  tok" >&2
   cat ${TEST_DIR}/parse/${nn}.vg.txt \
-    | run_tokenizer \
+    | run_lexer \
     > $temp_tokens_file
   if [ $? -ne 0 ]; then
-    ERRS="${ERRS},${nn}_tokenize"
-    local_errs="${local_errs},${nn}_tokenize"
+    ERRS="${ERRS},${nn}_lex"
+    local_errs="${local_errs},${nn}_lex"
     return
   fi
 
