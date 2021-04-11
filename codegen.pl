@@ -221,6 +221,22 @@ sub gen_expr {
         } elsif (0 <= str_arr_index($lvar_names, $str)) {
             my $cp_src = to_lvar_ref($lvar_names, $str);
             printf("  cp %s reg_a\n", $cp_src);
+
+
+        } elsif ($str =~ /^vram\[(.+?)\]/) {
+            my $vram_arg = $1;
+            if ($vram_arg =~ /^[0-9]+$/) {
+                printf("  get_vram %s reg_a\n", $vram_arg);
+            } else {
+                my $vram_ref = to_asm_str($fn_arg_names, $lvar_names, sval($vram_arg));
+                if (defined($vram_ref)) {
+                    printf("  get_vram %s reg_a\n", $vram_ref);
+                } else {
+                    die;
+                }
+            }
+
+
         } else {
             die;
         }
