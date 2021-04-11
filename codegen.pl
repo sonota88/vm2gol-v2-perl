@@ -362,7 +362,7 @@ sub gen_while {
 
     printf("label %s\n", $label_begin);
 
-    _gen_expr_binary($fn_arg_names, $lvar_names, $cond_expr);
+    gen_expr($fn_arg_names, $lvar_names, $cond_expr);
 
     printf("  set_reg_b 1\n");
     printf("  compare\n");
@@ -412,7 +412,7 @@ sub gen_case {
 
         if (Val::str_eq($cond_head, "eq")) {
             printf("  # -->> expr\n");
-            _gen_expr_binary($fn_arg_names, $lvar_names, $cond);
+            gen_expr($fn_arg_names, $lvar_names, $cond);
             printf("  # <<-- expr\n");
 
             printf("  set_reg_b 1\n");
