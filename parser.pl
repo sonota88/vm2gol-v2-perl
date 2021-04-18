@@ -237,47 +237,49 @@ sub parse_var {
 }
 
 sub parse_expr_right {
-    my $expr_l = shift;
-
     # puts_fn("parse_expr_right");
 
     my $t = peek(0);
 
-    if (
-         Token::is($t, "sym", ";")
-      || Token::is($t, "sym", ")")
-    ) {
-        return $expr_l;
-    }
-
     my $expr_r;
-    my $expr_els;
+    my @expr_els;
     if (Token::is($t, "sym", "+")) {
         consume_sym("+");
         $expr_r = parse_expr();
-        $expr_els = [sval("+"), $expr_l, $expr_r];
+        @expr_els = (sval("+"), $expr_r);
 
     } elsif (Token::is($t, "sym", "*")) {
         consume_sym("*");
         $expr_r = parse_expr();
-        $expr_els = [sval("*"), $expr_l, $expr_r];
+        @expr_els = (sval("*"), $expr_r);
 
     } elsif (Token::is($t, "sym", "==")) {
         consume_sym("==");
         $expr_r = parse_expr();
-        $expr_els = [sval("eq"), $expr_l, $expr_r];
+        @expr_els = (sval("eq"), $expr_r);
 
     } elsif (Token::is($t, "sym", "!=")) {
         consume_sym("!=");
         $expr_r = parse_expr();
-        $expr_els = [sval("neq"), $expr_l, $expr_r];
+        @expr_els = (sval("neq"), $expr_r);
 
     } else {
-        p_e("282", $expr_els);
+        p_e("282", @expr_els);
         die;
     }
 
-    return $expr_els;
+    return @expr_els;
+}
+
+sub is_next_binop {
+    my $t = peek(0);
+
+    return (
+        Token::is($t, "sym", "+" ) ||
+        Token::is($t, "sym", "*" ) ||
+        Token::is($t, "sym", "==") ||
+        Token::is($t, "sym", "!=")
+        );
 }
 
 sub parse_expr {
@@ -290,20 +292,50 @@ sub parse_expr {
         consume_sym("(");
         $expr_l = parse_expr();
         consume_sym(")");
-        return parse_expr_right($expr_l);
+
+        if (is_next_binop()) {
+            my @op_right = parse_expr_right();
+            return [
+                $op_right[0],
+                $expr_l,
+                $op_right[1]
+                ];
+        } else {
+            return $expr_l;
+        }
     }
 
     if (Token::kind_eq($tl, "int")) {
         $pos++;
         my $n = $tl->{"str"};
         $expr_l = ival($n);
-        return parse_expr_right($expr_l);
+
+        if (is_next_binop()) {
+            my @op_right = parse_expr_right();
+            return [
+                $op_right[0],
+                $expr_l,
+                $op_right[1]
+                ];
+        } else {
+            return $expr_l;
+        }
 
     } elsif (Token::kind_eq($tl, "ident")) {
         $pos++;
         my $s = $tl->{"str"};
         $expr_l = sval($s);
-        return parse_expr_right($expr_l);
+
+        if (is_next_binop()) {
+            my @op_right = parse_expr_right();
+            return [
+                $op_right[0],
+                $expr_l,
+                $op_right[1]
+                ];
+        } else {
+            return $expr_l;
+        }
 
     } else {
         die;
