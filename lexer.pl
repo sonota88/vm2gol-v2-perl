@@ -37,7 +37,7 @@ sub tokenize {
             $temp = $1;
             puts_token("sym", $temp);
             $pos += length($temp);
-        } elsif ($rest =~ /^([a-z_][a-z0-9_\[\]]*)/) {
+        } elsif ($rest =~ /^([a-z_][a-z0-9_]*)/) {
             $temp = $1;
             puts_token("ident", $temp);
             $pos += length($temp);
