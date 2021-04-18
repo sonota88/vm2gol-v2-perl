@@ -256,9 +256,9 @@ sub gen_call_set {
     # p_e("gen_call_set", $stmt_rest);
 
     my $lvar_name = head($stmt_rest)->{"val"};
-    my $fn_temp   = $stmt_rest->[1];
+    my $funcall   = $stmt_rest->[1];
 
-    gen_call($fn_arg_names, $lvar_names, $fn_temp);
+    gen_call($fn_arg_names, $lvar_names, $funcall);
 
     my $ref = to_lvar_ref($lvar_names, $lvar_name);
     printf("  cp reg_a %s\n", $ref);
