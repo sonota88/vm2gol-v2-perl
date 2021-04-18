@@ -25,7 +25,7 @@ sub tokenize {
             $temp = $1;
             puts_token("str", $temp);
             $pos += length($temp) + 2;
-        } elsif ($rest =~ /^(func|set|var|call_set|call|return|case|while|_cmt)[^a-z]/) {
+        } elsif ($rest =~ /^(func|set|var|call_set|call|return|case|while|_cmt)[^a-z_]/) {
             $temp = $1;
             puts_token("kw", $temp);
             $pos += length($temp);
