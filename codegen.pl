@@ -506,15 +506,21 @@ sub gen_top_stmts {
     }
 }
 
+sub codegen {
+    my $tree = shift;
+
+    my $top_stmts = rest($tree);
+
+    print("  call main\n");
+    print("  exit\n");
+
+    gen_top_stmts($top_stmts);
+}
+
 # --------------------------------
 
 my $src = Utils::read_stdin_all();
 
 my $tree = Json::parse($src);
 
-print("  call main\n");
-print("  exit\n");
-
-my $top_stmts = rest($tree);
-
-gen_top_stmts($top_stmts);
+codegen($tree);
