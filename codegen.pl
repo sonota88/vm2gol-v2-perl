@@ -274,17 +274,7 @@ sub gen_call_set {
     my $lvar_name = head($stmt_rest)->{"val"};
     my $fn_temp   = $stmt_rest->[1];
 
-    my $fn_name = head($fn_temp)->{"val"};
-    my $fn_args = rest($fn_temp);
-
-    for my $fn_arg (reverse(@$fn_args)) {
-        gen_expr($fn_arg_names, $lvar_names, $fn_arg);
-        printf("  push reg_a\n");
-    }
-
-    gen_vm_comment("call_set  " . $fn_name);
-    printf("  call %s\n", $fn_name);
-    printf("  add_sp %d\n", Utils::arr_size($fn_args));
+    gen_call($fn_arg_names, $lvar_names, $fn_temp);
 
     my $ref = to_lvar_ref($lvar_names, $lvar_name);
     printf("  cp reg_a %s\n", $ref);
