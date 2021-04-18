@@ -76,7 +76,7 @@ sub fn_arg_disp {
     return $i + 2;
 }
 
-sub to_lvar_ref {
+sub lvar_disp {
     my $names = shift;
     my $name = shift;
 
@@ -84,7 +84,7 @@ sub to_lvar_ref {
     if ($i < 0) {
         die "lvar not found\n";
     }
-    return "[bp:-" . ($i + 1) . "]";
+    return -($i + 1);
 }
 
 # --------------------------------
@@ -198,8 +198,8 @@ sub gen_expr {
             my $disp = fn_arg_disp($fn_arg_names, $str);
             printf("  cp [bp:%d] reg_a\n", $disp);
         } elsif (0 <= str_arr_index($lvar_names, $str)) {
-            my $cp_src = to_lvar_ref($lvar_names, $str);
-            printf("  cp %s reg_a\n", $cp_src);
+            my $disp = lvar_disp($lvar_names, $str);
+            printf("  cp [bp:%d] reg_a\n", $disp);
         } else {
             die;
         }
@@ -239,8 +239,8 @@ sub gen_call_set {
 
     gen_call($fn_arg_names, $lvar_names, $funcall);
 
-    my $ref = to_lvar_ref($lvar_names, $lvar_name);
-    printf("  cp reg_a %s\n", $ref);
+    my $disp = lvar_disp($lvar_names, $lvar_name);
+    printf("  cp reg_a [bp:%d]\n", $disp);
 }
 
 sub gen_set {
@@ -259,8 +259,8 @@ sub gen_set {
     my $dest_str = $dest->{"val"};
 
     if (0 <= str_arr_index($lvar_names, $dest_str)) {
-        my $ref = to_lvar_ref($lvar_names, $dest_str);
-        printf("  cp %s %s\n", $src_val, $ref);
+        my $disp = lvar_disp($lvar_names, $dest_str);
+        printf("  cp %s [bp:%d]\n", $src_val, $disp);
     } else {
         die;
     }
