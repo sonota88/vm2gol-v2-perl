@@ -343,7 +343,7 @@ sub gen_while {
 sub gen_case {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
-    my $when_blocks = shift;
+    my $when_clauses = shift;
 
     puts_fn("gen_case");
 
@@ -357,11 +357,11 @@ sub gen_case {
     printf("\n");
     printf("  # -->> case_%d\n", $label_id);
 
-    for my $when_block (@$when_blocks) {
+    for my $when_clause (@$when_clauses) {
         $when_idx++;
 
-        my $cond = head($when_block);
-        my $rest = rest($when_block);
+        my $cond = head($when_clause);
+        my $rest = rest($when_clause);
 
         printf(
             "  # when_%d_%d: %s\n",
