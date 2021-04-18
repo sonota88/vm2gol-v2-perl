@@ -364,7 +364,7 @@ sub gen_while {
 
     gen_expr($fn_arg_names, $lvar_names, $cond_expr);
 
-    printf("  set_reg_b 1\n");
+    printf("  cp 1 reg_b\n");
     printf("  compare\n");
 
     printf("  jump_eq %s\n", $label_true);
@@ -411,7 +411,7 @@ sub gen_case {
             gen_expr($fn_arg_names, $lvar_names, $cond);
             printf("  # <<-- expr\n");
 
-            printf("  set_reg_b 1\n");
+            printf("  cp 1 reg_b\n");
 
             printf("  compare\n");
             printf("  jump_eq %s_%d\n", $label_when_head, $when_idx);
