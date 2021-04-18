@@ -65,7 +65,7 @@ sub str_arr_index {
 
 # --------------------------------
 
-sub to_fn_arg_ref {
+sub fn_arg_disp {
     my $names = shift;
     my $name = shift;
 
@@ -73,7 +73,7 @@ sub to_fn_arg_ref {
     if ($i < 0) {
         die "fn arg not found\n";
     }
-    return "[bp:" . ($i + 2) . "]";
+    return $i + 2;
 }
 
 sub to_lvar_ref {
@@ -195,8 +195,8 @@ sub gen_expr {
     } elsif (Val::kind_eq($expr, "str")) {
         my $str = $expr->{"val"};
         if (0 <= str_arr_index($fn_arg_names, $str)) {
-            my $cp_src = to_fn_arg_ref($fn_arg_names, $str);
-            printf("  cp %s reg_a\n", $cp_src);
+            my $disp = fn_arg_disp($fn_arg_names, $str);
+            printf("  cp [bp:%d] reg_a\n", $disp);
         } elsif (0 <= str_arr_index($lvar_names, $str)) {
             my $cp_src = to_lvar_ref($lvar_names, $str);
             printf("  cp %s reg_a\n", $cp_src);
