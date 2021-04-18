@@ -290,52 +290,29 @@ sub parse_expr {
         $expr_l = parse_expr();
         consume_sym(")");
 
-        if (is_next_binop()) {
-            my @op_right = parse_expr_right();
-            return [
-                $op_right[0],
-                $expr_l,
-                $op_right[1]
-                ];
-        } else {
-            return $expr_l;
-        }
-    }
-
-    if (Token::kind_eq($tl, "int")) {
+    } elsif (Token::kind_eq($tl, "int")) {
         $pos++;
         my $n = $tl->{"str"};
         $expr_l = ival($n);
-
-        if (is_next_binop()) {
-            my @op_right = parse_expr_right();
-            return [
-                $op_right[0],
-                $expr_l,
-                $op_right[1]
-                ];
-        } else {
-            return $expr_l;
-        }
 
     } elsif (Token::kind_eq($tl, "ident")) {
         $pos++;
         my $s = $tl->{"str"};
         $expr_l = sval($s);
 
-        if (is_next_binop()) {
-            my @op_right = parse_expr_right();
-            return [
-                $op_right[0],
-                $expr_l,
-                $op_right[1]
-                ];
-        } else {
-            return $expr_l;
-        }
-
     } else {
         die;
+    }
+
+    if (is_next_binop()) {
+        my @op_right = parse_expr_right();
+        return [
+            $op_right[0],
+            $expr_l,
+            $op_right[1]
+            ];
+    } else {
+        return $expr_l;
     }
 }
 
