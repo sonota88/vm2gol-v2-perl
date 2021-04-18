@@ -87,28 +87,7 @@ sub to_lvar_ref {
     return "[bp:-" . ($i + 1) . "]";
 }
 
-sub to_asm_str {
-    my $fn_arg_names = shift;
-    my $lvar_names = shift;
-    my $val = shift;
-
-    if (Utils::is_arr($val)) {
-        return undef;
-    } elsif (Val::kind_eq($val, "int")) {
-        return $val->{"val"};
-    } elsif (Val::kind_eq($val, "str")) {
-        my $str = $val->{"val"};
-        if (0 <= str_arr_index($fn_arg_names, $str)) {
-            return to_fn_arg_ref($fn_arg_names, $str);
-        } elsif (0 <= str_arr_index($lvar_names, $str)) {
-            return to_lvar_ref($lvar_names, $str);
-        } else {
-            return undef;
-        }
-    } else {
-        return undef;
-    }
-}
+# --------------------------------
 
 sub gen_var {
     my $fn_arg_names = shift;
