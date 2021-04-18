@@ -242,33 +242,30 @@ sub parse_expr_right {
     my $t = peek(0);
 
     my $expr_r;
-    my @expr_els;
     if (Token::is($t, "sym", "+")) {
         consume_sym("+");
         $expr_r = parse_expr();
-        @expr_els = (sval("+"), $expr_r);
+        return (sval("+"), $expr_r);
 
     } elsif (Token::is($t, "sym", "*")) {
         consume_sym("*");
         $expr_r = parse_expr();
-        @expr_els = (sval("*"), $expr_r);
+        return (sval("*"), $expr_r);
 
     } elsif (Token::is($t, "sym", "==")) {
         consume_sym("==");
         $expr_r = parse_expr();
-        @expr_els = (sval("eq"), $expr_r);
+        return (sval("eq"), $expr_r);
 
     } elsif (Token::is($t, "sym", "!=")) {
         consume_sym("!=");
         $expr_r = parse_expr();
-        @expr_els = (sval("neq"), $expr_r);
+        return (sval("neq"), $expr_r);
 
     } else {
-        p_e("282", @expr_els);
+        p_e("266");
         die;
     }
-
-    return @expr_els;
 }
 
 sub is_next_binop {
