@@ -2,8 +2,10 @@
 
 func ret_vram_lvar() {
   var vi = 49;
+  var vram_val;
   // vram[ローカル変数] を return
-  return vram[vi];
+  call_set vram_val = get_vram(vi);
+  return vram_val;
 }
 
 func ret_lvar() {

@@ -519,6 +519,19 @@ sub gen_builtin_set_vram {
     print("  ret\n");
 }
 
+sub gen_builtin_get_vram {
+    print("\n");
+    print("label get_vram\n");
+    print("  push bp\n");
+    print("  cp sp bp\n");
+
+    print("  get_vram [bp:2] reg_a\n"); # vram_addr dest
+
+    print("  cp bp sp\n");
+    print("  pop bp\n");
+    print("  ret\n");
+}
+
 sub codegen {
     my $tree = shift;
 
@@ -531,6 +544,7 @@ sub codegen {
 
     print("#>builtins");
     gen_builtin_set_vram();
+    gen_builtin_get_vram();
     print("#<builtins");
 }
 

@@ -3,6 +3,6 @@
 func main() {
   var a;
   var vi = 0;
-  set a = vram[vi];
+  call_set a = get_vram(vi);
   call set_vram(vi, 42);
 }
