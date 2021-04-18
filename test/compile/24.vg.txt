@@ -4,5 +4,5 @@ func main() {
   var a;
   var vi = 0;
   set a = vram[vi];
-  set vram[vi] = 42;
+  call set_vram(vi, 42);
 }
