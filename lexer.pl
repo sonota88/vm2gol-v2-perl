@@ -1,6 +1,17 @@
 use strict;
 require "./lib/utils.pm";
 
+my @KEYWORDS = (
+  "func", "set", "var", "call_set", "call", "return", "case", "while",
+  "_cmt", "_debug"
+);
+
+sub is_kw {
+    my ($str) = @_;
+
+    return grep {$_ eq $str} @KEYWORDS;
+}
+
 sub puts_token {
     my ($kind, $str) = @_;
     printf("%s:%s\n", $kind, $str);
@@ -25,10 +36,6 @@ sub tokenize {
             $temp = $1;
             puts_token("str", $temp);
             $pos += length($temp) + 2;
-        } elsif ($rest =~ /^(func|set|var|call_set|call|return|case|while|_cmt|_debug)[^a-z_]/) {
-            $temp = $1;
-            puts_token("kw", $temp);
-            $pos += length($temp);
         } elsif ($rest =~ /^(-?[0-9]+)/) {
             $temp = $1;
             puts_token("int", $temp);
@@ -39,7 +46,13 @@ sub tokenize {
             $pos += length($temp);
         } elsif ($rest =~ /^([a-z_][a-z0-9_]*)/) {
             $temp = $1;
-            puts_token("ident", $temp);
+            my $kind;
+            if (is_kw($temp)) {
+                $kind = "kw";
+            } else {
+                $kind = "ident";
+            }
+            puts_token($kind, $temp);
             $pos += length($temp);
         } else {
             die;
