@@ -70,6 +70,11 @@ sub asm_prologue {
     printf("  cp sp bp\n");
 }
 
+sub asm_epilogue {
+    print("  cp bp sp\n");
+    print("  pop bp\n");
+}
+
 sub fn_arg_disp {
     my $names = shift;
     my $name = shift;
@@ -438,8 +443,7 @@ sub gen_func_def {
     }
 
     print("\n");
-    print("  cp bp sp\n");
-    print("  pop bp\n");
+    asm_epilogue();
     print("  ret\n");
 }
 
@@ -467,8 +471,7 @@ sub gen_builtin_set_vram {
 
     print("  set_vram [bp:2] [bp:3]\n"); # vram_addr value
 
-    print("  cp bp sp\n");
-    print("  pop bp\n");
+    asm_epilogue();
     print("  ret\n");
 }
 
@@ -479,8 +482,7 @@ sub gen_builtin_get_vram {
 
     print("  get_vram [bp:2] reg_a\n"); # vram_addr dest
 
-    print("  cp bp sp\n");
-    print("  pop bp\n");
+    asm_epilogue();
     print("  ret\n");
 }
 
