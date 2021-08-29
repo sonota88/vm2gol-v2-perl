@@ -116,11 +116,11 @@ sub parse_args {
 
     while (Token::is(peek(0), "sym", ",")) {
         consume_sym(",");
-        my $rest_arg = _parse_arg();
-        unless ($rest_arg) {
+        my $arg = _parse_arg();
+        unless ($arg) {
             last;
         }
-        push(@$args, $rest_arg);
+        push(@$args, $arg);
     }
 
     return $args;
