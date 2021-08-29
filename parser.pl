@@ -87,7 +87,7 @@ sub consume_sym {
 
 # --------------------------------
 
-sub parse_arg {
+sub _parse_arg {
     # puts_fn("parse_arg");
 
     my $t = peek(0);
@@ -103,45 +103,20 @@ sub parse_arg {
     }
 }
 
-sub parse_args_first {
-    # puts_fn("parse_args_first");
-
-    my $t = peek(0);
-
-    if (Token::is($t, "sym", ")")) {
-        return 0;
-    }
-
-    return parse_arg();
-}
-
-sub parse_args_rest {
-    # puts_fn("parse_args_rest");
-
-    my $t = peek(0);
-
-    if (Token::is($t, "sym", ")")) {
-        return 0;
-    }
-
-    consume_sym(",");
-
-    return parse_arg();
-}
-
 sub parse_args {
     puts_fn("parse_args");
 
     my $args = [];
 
-    my $first_arg = parse_args_first();
-    unless ($first_arg) {
+    if (Token::is(peek(0), "sym", ")")) {
         return $args;
     }
-    push(@$args, $first_arg);
 
-    while (1) {
-        my $rest_arg = parse_args_rest();
+    push(@$args, _parse_arg());
+
+    while (Token::is(peek(0), "sym", ",")) {
+        consume_sym(",");
+        my $rest_arg = _parse_arg();
         unless ($rest_arg) {
             last;
         }
