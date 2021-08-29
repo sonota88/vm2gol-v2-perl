@@ -85,22 +85,27 @@ sub consume_sym {
     $pos++;
 }
 
+sub get_token_value {
+    my $t = shift;
+
+    if (Token::kind_eq($t, "int")) {
+        return ival($t->{"str"});
+    } elsif (Token::kind_eq($t, "ident")) {
+        return sval($t->{"str"});
+    } else {
+        die;
+    }
+}
+
 # --------------------------------
 
 sub _parse_arg {
     # puts_fn("parse_arg");
 
     my $t = peek(0);
+    $pos++;
 
-    if (Token::kind_eq($t, "int")) {
-        $pos++;
-        return ival($t->{"str"});
-    } elsif (Token::kind_eq($t, "ident")) {
-        $pos++;
-        return sval($t->{"str"});
-    } else {
-        die;
-    }
+    return get_token_value($t);
 }
 
 sub parse_args {
@@ -267,13 +272,11 @@ sub parse_expr {
 
     } elsif (Token::kind_eq($tl, "int")) {
         $pos++;
-        my $n = $tl->{"str"};
-        $expr_l = ival($n);
+        $expr_l = get_token_value($tl);
 
     } elsif (Token::kind_eq($tl, "ident")) {
         $pos++;
-        my $s = $tl->{"str"};
-        $expr_l = sval($s);
+        $expr_l = get_token_value($tl);
 
     } else {
         die;
