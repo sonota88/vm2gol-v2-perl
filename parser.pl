@@ -285,7 +285,7 @@ sub parse_expr {
     my $tl = peek(0);
     my $expr_l;
 
-    if (Token::is($tl, "sym", "(")) {
+    if (Token::kind_eq($tl, "sym")) {
         consume_sym("(");
         $expr_l = parse_expr();
         consume_sym(")");
