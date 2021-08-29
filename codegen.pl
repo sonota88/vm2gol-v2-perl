@@ -275,14 +275,6 @@ sub gen_return {
     gen_expr([], $lvar_names, $retval);
 }
 
-sub gen_vm_comment {
-    my $cmt = shift;
-
-    $cmt =~ s/ /~/g;
-
-    printf("  _cmt %s\n", $cmt);
-}
-
 sub gen_while {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
@@ -368,6 +360,14 @@ sub gen_case {
     printf("label end_case_%d\n", $label_id);
     printf("  # <<-- case_%d\n", $label_id);
     printf("\n");
+}
+
+sub gen_vm_comment {
+    my $cmt = shift;
+
+    $cmt =~ s/ /~/g;
+
+    printf("  _cmt %s\n", $cmt);
 }
 
 sub gen_stmt {
