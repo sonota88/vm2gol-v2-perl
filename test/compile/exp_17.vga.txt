@@ -27,8 +27,6 @@ label end_eq_2
   cp 0 reg_b
   compare
   jump_eq end_while_1
-  jump true_1
-label true_1
   cp 1 reg_a
   cp reg_a [bp:-1]
   jump while_1
