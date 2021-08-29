@@ -339,11 +339,11 @@ sub gen_case {
             gen_expr($fn_arg_names, $lvar_names, $cond);
             printf("  # <<-- expr\n");
 
-            printf("  cp 1 reg_b\n");
+            printf("  cp 0 reg_b\n");
 
             printf("  compare\n");
-            printf("  jump_eq %s_%d\n", $label_when_head, $when_idx);
-            printf("  jump %s_%d\n", $label_end_when_head, $when_idx);
+            printf("  jump_eq %s_%d\n", $label_end_when_head, $when_idx);
+            printf("  jump %s_%d\n", $label_when_head, $when_idx);
 
             printf("label %s_%d\n", $label_when_head, $when_idx);
 
