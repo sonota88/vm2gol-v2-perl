@@ -65,6 +65,11 @@ sub str_arr_index {
 
 # --------------------------------
 
+sub asm_prologue {
+    printf("  push bp\n");
+    printf("  cp sp bp\n");
+}
+
 sub fn_arg_disp {
     my $names = shift;
     my $name = shift;
@@ -414,8 +419,7 @@ sub gen_func_def {
 
     print("\n");
     printf("label %s\n", $fn_name);
-    print("  push bp\n");
-    print("  cp sp bp\n");
+    asm_prologue();
     print("\n");
 
     my $lvar_names = [];
@@ -459,8 +463,7 @@ sub gen_top_stmts {
 sub gen_builtin_set_vram {
     print("\n");
     print("label set_vram\n");
-    print("  push bp\n");
-    print("  cp sp bp\n");
+    asm_prologue();
 
     print("  set_vram [bp:2] [bp:3]\n"); # vram_addr value
 
@@ -472,8 +475,7 @@ sub gen_builtin_set_vram {
 sub gen_builtin_get_vram {
     print("\n");
     print("label get_vram\n");
-    print("  push bp\n");
-    print("  cp sp bp\n");
+    asm_prologue();
 
     print("  get_vram [bp:2] reg_a\n"); # vram_addr dest
 
