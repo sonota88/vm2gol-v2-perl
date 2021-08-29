@@ -478,6 +478,19 @@ sub parse_vm_comment {
         ];
 }
 
+sub parse_debug {
+    puts_fn("parse_debug");
+
+    consume_kw("_debug");
+    consume_sym("(");
+    consume_sym(")");
+    consume_sym(";");
+
+    return [
+        sval("_debug")
+        ];
+}
+
 sub parse_stmt {
     my $t = peek(0);
 

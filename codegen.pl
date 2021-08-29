@@ -368,6 +368,10 @@ sub gen_vm_comment {
     printf("  _cmt %s\n", $cmt);
 }
 
+sub gen_debug {
+    printf("  _debug\n");
+}
+
 sub gen_stmt {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
@@ -383,6 +387,7 @@ sub gen_stmt {
     elsif (Val::str_eq($stmt_head, "while"   )) { gen_while(     $fn_arg_names, $lvar_names, $stmt_rest); }
     elsif (Val::str_eq($stmt_head, "case"    )) { gen_case(      $fn_arg_names, $lvar_names, $stmt_rest); }
     elsif (Val::str_eq($stmt_head, "_cmt"    )) { gen_vm_comment($stmt_rest->[0]->{"val"}); }
+    elsif (Val::str_eq($stmt_head, "_debug"  )) { gen_debug(); }
     else {
         die;
     }
