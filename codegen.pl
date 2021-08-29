@@ -89,18 +89,6 @@ sub lvar_disp {
 
 # --------------------------------
 
-sub gen_var {
-    my $fn_arg_names = shift;
-    my $lvar_names = shift;
-    my $stmt_rest = shift;
-
-    print("  sub_sp 1\n");
-
-    if (Utils::arr_size($stmt_rest) == 2) {
-        gen_set($fn_arg_names, $lvar_names, $stmt_rest);
-    }
-}
-
 sub gen_expr_add {
     printf("  pop reg_b\n");
     printf("  pop reg_a\n");
@@ -397,6 +385,18 @@ sub gen_stmts {
 
     for my $stmt (@$stmts) {
         gen_stmt($fn_arg_names, $lvar_names, $stmt);
+    }
+}
+
+sub gen_var {
+    my $fn_arg_names = shift;
+    my $lvar_names = shift;
+    my $stmt_rest = shift;
+
+    print("  sub_sp 1\n");
+
+    if (Utils::arr_size($stmt_rest) == 2) {
+        gen_set($fn_arg_names, $lvar_names, $stmt_rest);
     }
 }
 
