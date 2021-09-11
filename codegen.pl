@@ -453,10 +453,8 @@ sub gen_func_def {
 
     print("  # 関数の処理本体\n");
     for my $stmt (@$body) {
-        my $stmt_rest = rest($stmt);
-
         if (Val::str_eq(head($stmt), "var")) {
-            my $var_name = head($stmt_rest)->{"val"};
+            my $var_name = $stmt->[1]->{"val"};
             push(@$lvar_names, $var_name);
             gen_var($fn_arg_names, $lvar_names, $stmt);
         } else {
