@@ -206,6 +206,25 @@ sub gen_expr {
     }
 }
 
+sub _gen_funcall {
+    my $fn_arg_names = shift;
+    my $lvar_names = shift;
+    my $funcall = shift;
+
+    my $fn_name = head($funcall)->{"val"};
+    my $fn_args = rest($funcall);
+
+    for my $fn_arg (reverse(@$fn_args)) {
+        gen_expr($fn_arg_names, $lvar_names, $fn_arg);
+        printf("  push reg_a\n");
+    }
+
+    gen_vm_comment("call  $fn_name");
+    printf("  call %s\n", $fn_name);
+
+    printf("  add_sp %d\n", Utils::arr_size($fn_args));
+}
+
 sub gen_call {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
