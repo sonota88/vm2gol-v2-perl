@@ -329,7 +329,9 @@ sub gen_while {
 sub gen_case {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
-    my $when_clauses = shift;
+    my $stmt = shift;
+
+    my $when_clauses = rest($stmt);
 
     puts_fn("gen_case");
 
@@ -399,7 +401,7 @@ sub gen_stmt {
     elsif (Val::str_eq($stmt_head, "call_set")) { gen_call_set(  $fn_arg_names, $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "return"  )) { gen_return(                   $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "while"   )) { gen_while(     $fn_arg_names, $lvar_names, $stmt_rest); }
-    elsif (Val::str_eq($stmt_head, "case"    )) { gen_case(      $fn_arg_names, $lvar_names, $stmt_rest); }
+    elsif (Val::str_eq($stmt_head, "case"    )) { gen_case(      $fn_arg_names, $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "_cmt"    )) { gen_vm_comment($stmt_rest->[0]->{"val"}); }
     elsif (Val::str_eq($stmt_head, "_debug"  )) { gen_debug(); }
     else {
