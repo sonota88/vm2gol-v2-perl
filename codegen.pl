@@ -433,11 +433,11 @@ sub gen_var {
 }
 
 sub gen_func_def {
-    my $rest = shift;
+    my $func_def = shift;
 
-    my $fn_name = $rest->[0]->{"val"};
-    my $fn_arg_vals = $rest->[1];
-    my $body = $rest->[2];
+    my $fn_name = $func_def->[1]->{"val"};
+    my $fn_arg_vals = $func_def->[2];
+    my $body = $func_def->[3];
 
     my $fn_arg_names = [];
     for my $val (@$fn_arg_vals) {
@@ -479,7 +479,7 @@ sub gen_top_stmts {
         my $stmt_rest = rest($it);
 
         if (Val::str_eq($stmt_head, "func") ) {
-            gen_func_def($stmt_rest);
+            gen_func_def($it);
         } else {
             die "not_yet_impl";
         }
