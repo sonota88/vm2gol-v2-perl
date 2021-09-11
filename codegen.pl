@@ -295,12 +295,12 @@ sub gen_return {
 sub gen_while {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
-    my $stmt_rest = shift;
+    my $stmt = shift;
 
     puts_fn("gen_while");
 
-    my $cond_expr = head($stmt_rest);
-    my $body = $stmt_rest->[1];
+    my $cond_expr = $stmt->[1];
+    my $body = $stmt->[2];
 
     my $label_id = get_label_id();
     my $label_begin = "while_$label_id";
@@ -400,7 +400,7 @@ sub gen_stmt {
     elsif (Val::str_eq($stmt_head, "call"    )) { gen_call(      $fn_arg_names, $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "call_set")) { gen_call_set(  $fn_arg_names, $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "return"  )) { gen_return(                   $lvar_names, $stmt); }
-    elsif (Val::str_eq($stmt_head, "while"   )) { gen_while(     $fn_arg_names, $lvar_names, $stmt_rest); }
+    elsif (Val::str_eq($stmt_head, "while"   )) { gen_while(     $fn_arg_names, $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "case"    )) { gen_case(      $fn_arg_names, $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "_cmt"    )) { gen_vm_comment($stmt_rest->[0]->{"val"}); }
     elsif (Val::str_eq($stmt_head, "_debug"  )) { gen_debug(); }
