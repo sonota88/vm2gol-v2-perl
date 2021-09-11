@@ -468,7 +468,9 @@ sub gen_func_def {
 }
 
 sub gen_top_stmts {
-    my $top_stmts = shift;
+    my $tree = shift;
+
+    my $top_stmts = rest($tree);
 
     puts_fn("gen_top_stmts");
 
@@ -508,12 +510,10 @@ sub gen_builtin_get_vram {
 sub codegen {
     my $tree = shift;
 
-    my $top_stmts = rest($tree);
-
     print("  call main\n");
     print("  exit\n");
 
-    gen_top_stmts($top_stmts);
+    gen_top_stmts($tree);
 
     print("#>builtins");
     gen_builtin_set_vram();
