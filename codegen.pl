@@ -238,12 +238,12 @@ sub gen_call {
 sub gen_call_set {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
-    my $stmt_rest = shift;
+    my $stmt = shift;
 
-    # p_e("gen_call_set", $stmt_rest);
+    # p_e("gen_call_set", $stmt);
 
-    my $lvar_name = head($stmt_rest)->{"val"};
-    my $funcall   = $stmt_rest->[1];
+    my $lvar_name = $stmt->[1]->{"val"};
+    my $funcall   = $stmt->[2];
 
     _gen_funcall($fn_arg_names, $lvar_names, $funcall);
 
@@ -396,7 +396,7 @@ sub gen_stmt {
 
     if    (Val::str_eq($stmt_head, "set"     )) { gen_set(       $fn_arg_names, $lvar_names, $stmt_rest); }
     elsif (Val::str_eq($stmt_head, "call"    )) { gen_call(      $fn_arg_names, $lvar_names, $stmt); }
-    elsif (Val::str_eq($stmt_head, "call_set")) { gen_call_set(  $fn_arg_names, $lvar_names, $stmt_rest); }
+    elsif (Val::str_eq($stmt_head, "call_set")) { gen_call_set(  $fn_arg_names, $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "return"  )) { gen_return(                   $lvar_names, $stmt_rest); }
     elsif (Val::str_eq($stmt_head, "while"   )) { gen_while(     $fn_arg_names, $lvar_names, $stmt_rest); }
     elsif (Val::str_eq($stmt_head, "case"    )) { gen_case(      $fn_arg_names, $lvar_names, $stmt_rest); }
