@@ -235,7 +235,7 @@ sub parse_expr_right {
     } elsif (Token::is($t, "sym", "==")) {
         consume_sym("==");
         $expr_r = parse_expr();
-        return (sval("eq"), $expr_r);
+        return (sval("=="), $expr_r);
 
     } elsif (Token::is($t, "sym", "!=")) {
         consume_sym("!=");
