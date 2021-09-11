@@ -285,9 +285,9 @@ sub gen_set {
 
 sub gen_return {
     my $lvar_names = shift;
-    my $stmt_rest = shift;
+    my $stmt = shift;
 
-    my $retval = head($stmt_rest);
+    my $retval = $stmt->[1];
 
     gen_expr([], $lvar_names, $retval);
 }
@@ -397,7 +397,7 @@ sub gen_stmt {
     if    (Val::str_eq($stmt_head, "set"     )) { gen_set(       $fn_arg_names, $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "call"    )) { gen_call(      $fn_arg_names, $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "call_set")) { gen_call_set(  $fn_arg_names, $lvar_names, $stmt); }
-    elsif (Val::str_eq($stmt_head, "return"  )) { gen_return(                   $lvar_names, $stmt_rest); }
+    elsif (Val::str_eq($stmt_head, "return"  )) { gen_return(                   $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "while"   )) { gen_while(     $fn_arg_names, $lvar_names, $stmt_rest); }
     elsif (Val::str_eq($stmt_head, "case"    )) { gen_case(      $fn_arg_names, $lvar_names, $stmt_rest); }
     elsif (Val::str_eq($stmt_head, "_cmt"    )) { gen_vm_comment($stmt_rest->[0]->{"val"}); }
