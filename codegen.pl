@@ -410,13 +410,13 @@ sub gen_stmts {
 sub gen_var {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
-    my $stmt_rest = shift;
+    my $stmt = shift;
 
     print("  sub_sp 1\n");
 
-    if (Utils::arr_size($stmt_rest) == 2) {
-        my $dest = $stmt_rest->[0];
-        my $expr = $stmt_rest->[1];
+    if (Utils::arr_size($stmt) == 3) {
+        my $dest = $stmt->[1];
+        my $expr = $stmt->[2];
         _gen_set($fn_arg_names, $lvar_names, $dest, $expr);
     }
 }
@@ -447,7 +447,7 @@ sub gen_func_def {
         if (Val::str_eq(head($stmt), "var")) {
             my $var_name = head($stmt_rest)->{"val"};
             push(@$lvar_names, $var_name);
-            gen_var($fn_arg_names, $lvar_names, $stmt_rest);
+            gen_var($fn_arg_names, $lvar_names, $stmt);
         } else {
             gen_stmt($fn_arg_names, $lvar_names, $stmt);
         }
