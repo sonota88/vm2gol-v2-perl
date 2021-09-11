@@ -402,7 +402,7 @@ sub gen_stmt {
     elsif (Val::str_eq($stmt_head, "return"  )) { gen_return(                   $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "while"   )) { gen_while(     $fn_arg_names, $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "case"    )) { gen_case(      $fn_arg_names, $lvar_names, $stmt); }
-    elsif (Val::str_eq($stmt_head, "_cmt"    )) { gen_vm_comment($stmt_rest->[0]->{"val"}); }
+    elsif (Val::str_eq($stmt_head, "_cmt"    )) { gen_vm_comment($stmt->[1]->{"val"}); }
     elsif (Val::str_eq($stmt_head, "_debug"  )) { gen_debug(); }
     else {
         die;
