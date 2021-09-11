@@ -394,7 +394,6 @@ sub gen_stmt {
     my $stmt = shift;
 
     my $stmt_head = head($stmt);
-    my $stmt_rest = rest($stmt);
 
     if    (Val::str_eq($stmt_head, "set"     )) { gen_set(       $fn_arg_names, $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "call"    )) { gen_call(      $fn_arg_names, $lvar_names, $stmt); }
