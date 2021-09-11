@@ -228,9 +228,11 @@ sub _gen_funcall {
 sub gen_call {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
-    my $stmt_rest = shift;
+    my $stmt = shift;
 
-    _gen_funcall($fn_arg_names, $lvar_names, $stmt_rest);
+    my $funcall = rest($stmt);
+
+    _gen_funcall($fn_arg_names, $lvar_names, $funcall);
 }
 
 sub gen_call_set {
@@ -393,7 +395,7 @@ sub gen_stmt {
     my $stmt_rest = rest($stmt);
 
     if    (Val::str_eq($stmt_head, "set"     )) { gen_set(       $fn_arg_names, $lvar_names, $stmt_rest); }
-    elsif (Val::str_eq($stmt_head, "call"    )) { gen_call(      $fn_arg_names, $lvar_names, $stmt_rest); }
+    elsif (Val::str_eq($stmt_head, "call"    )) { gen_call(      $fn_arg_names, $lvar_names, $stmt); }
     elsif (Val::str_eq($stmt_head, "call_set")) { gen_call_set(  $fn_arg_names, $lvar_names, $stmt_rest); }
     elsif (Val::str_eq($stmt_head, "return"  )) { gen_return(                   $lvar_names, $stmt_rest); }
     elsif (Val::str_eq($stmt_head, "while"   )) { gen_while(     $fn_arg_names, $lvar_names, $stmt_rest); }
