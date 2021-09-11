@@ -173,7 +173,7 @@ sub _gen_expr_binary {
         gen_expr_mult();
     } elsif (Val::str_eq($op, "==")) {
         gen_expr_eq();
-    } elsif (Val::str_eq($op, "neq")) {
+    } elsif (Val::str_eq($op, "!=")) {
         gen_expr_neq();
     } else {
         die;

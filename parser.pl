@@ -240,7 +240,7 @@ sub parse_expr_right {
     } elsif (Token::is($t, "sym", "!=")) {
         consume_sym("!=");
         $expr_r = parse_expr();
-        return (sval("neq"), $expr_r);
+        return (sval("!="), $expr_r);
 
     } else {
         p_e("266");
