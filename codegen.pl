@@ -270,17 +270,7 @@ sub gen_set {
     my $dest = $rest->[0];
     my $expr = $rest->[1];
 
-    gen_expr($fn_arg_names, $lvar_names, $expr);
-    my $src_val = "reg_a";
-
-    my $dest_str = $dest->{"val"};
-
-    if (0 <= str_arr_index($lvar_names, $dest_str)) {
-        my $disp = lvar_disp($lvar_names, $dest_str);
-        printf("  cp %s [bp:%d]\n", $src_val, $disp);
-    } else {
-        die;
-    }
+    _gen_set($fn_arg_names, $lvar_names, $dest, $expr);
 }
 
 sub gen_return {
@@ -425,7 +415,9 @@ sub gen_var {
     print("  sub_sp 1\n");
 
     if (Utils::arr_size($stmt_rest) == 2) {
-        gen_set($fn_arg_names, $lvar_names, $stmt_rest);
+        my $dest = $stmt_rest->[0];
+        my $expr = $stmt_rest->[1];
+        _gen_set($fn_arg_names, $lvar_names, $dest, $expr);
     }
 }
 
