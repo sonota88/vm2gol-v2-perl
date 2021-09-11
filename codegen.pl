@@ -241,6 +241,25 @@ sub gen_call_set {
     printf("  cp reg_a [bp:%d]\n", $disp);
 }
 
+sub _gen_set {
+    my $fn_arg_names = shift;
+    my $lvar_names = shift;
+    my $dest = shift;
+    my $expr = shift;
+
+    gen_expr($fn_arg_names, $lvar_names, $expr);
+    my $src_val = "reg_a";
+
+    my $dest_str = $dest->{"val"};
+
+    if (0 <= str_arr_index($lvar_names, $dest_str)) {
+        my $disp = lvar_disp($lvar_names, $dest_str);
+        printf("  cp %s [bp:%d]\n", $src_val, $disp);
+    } else {
+        die;
+    }
+}
+
 sub gen_set {
     my $fn_arg_names = shift;
     my $lvar_names = shift;
