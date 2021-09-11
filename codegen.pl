@@ -474,12 +474,12 @@ sub gen_top_stmts {
 
     puts_fn("gen_top_stmts");
 
-    for my $it (@$top_stmts) {
-        my $stmt_head = head($it);
-        my $stmt_rest = rest($it);
+    for my $top_stmt (@$top_stmts) {
+        my $stmt_head = head($top_stmt);
+        my $stmt_rest = rest($top_stmt);
 
         if (Val::str_eq($stmt_head, "func") ) {
-            gen_func_def($it);
+            gen_func_def($top_stmt);
         } else {
             die "not_yet_impl";
         }
