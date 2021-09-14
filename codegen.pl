@@ -356,19 +356,19 @@ sub gen_case {
             $label_id, $when_idx, Json::list_to_json_line($cond)
             );
 
-            printf("  # -->> expr\n");
-            gen_expr($fn_arg_names, $lvar_names, $cond);
-            printf("  # <<-- expr\n");
+        printf("  # -->> expr\n");
+        gen_expr($fn_arg_names, $lvar_names, $cond);
+        printf("  # <<-- expr\n");
 
-            printf("  cp 0 reg_b\n");
+        printf("  cp 0 reg_b\n");
 
-            printf("  compare\n");
-            printf("  jump_eq %s_%d\n", $label_end_when_head, $when_idx);
+        printf("  compare\n");
+        printf("  jump_eq %s_%d\n", $label_end_when_head, $when_idx);
 
-            gen_stmts($fn_arg_names, $lvar_names, $rest);
+        gen_stmts($fn_arg_names, $lvar_names, $rest);
 
-            printf("  jump %s\n", $label_end);
-            printf("label %s_%d\n", $label_end_when_head, $when_idx);
+        printf("  jump %s\n", $label_end);
+        printf("label %s_%d\n", $label_end_when_head, $when_idx);
     }
 
     printf("label end_case_%d\n", $label_id);
