@@ -243,20 +243,8 @@ sub parse_expr_right {
         return (sval("!="), $expr_r);
 
     } else {
-        p_e("266");
-        die;
+        return ();
     }
-}
-
-sub is_next_binop {
-    my $t = peek(0);
-
-    return (
-        Token::is($t, "sym", "+" ) ||
-        Token::is($t, "sym", "*" ) ||
-        Token::is($t, "sym", "==") ||
-        Token::is($t, "sym", "!=")
-        );
 }
 
 sub parse_expr {
@@ -282,16 +270,16 @@ sub parse_expr {
         die;
     }
 
-    if (is_next_binop()) {
-        my @op_right = parse_expr_right();
-        return [
-            $op_right[0],
-            $expr_l,
-            $op_right[1]
-            ];
-    } else {
+    my @op_right = parse_expr_right();
+    if (! @op_right) {
         return $expr_l;
     }
+
+    return [
+        $op_right[0],
+        $expr_l,
+        $op_right[1]
+        ];
 }
 
 sub parse_set {
