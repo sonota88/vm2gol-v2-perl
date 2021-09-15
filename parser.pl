@@ -222,26 +222,16 @@ sub parse_expr_right {
     my $t = peek(0);
 
     my $expr_r;
-    if (Token::is($t, "sym", "+")) {
-        consume_sym("+");
+    if (
+        Token::is($t, "sym", "+" ) ||
+        Token::is($t, "sym", "*" ) ||
+        Token::is($t, "sym", "==") ||
+        Token::is($t, "sym", "!=")
+    ) {
+        my $op = $t->{"str"};
+        $pos++;
         $expr_r = parse_expr();
-        return (sval("+"), $expr_r);
-
-    } elsif (Token::is($t, "sym", "*")) {
-        consume_sym("*");
-        $expr_r = parse_expr();
-        return (sval("*"), $expr_r);
-
-    } elsif (Token::is($t, "sym", "==")) {
-        consume_sym("==");
-        $expr_r = parse_expr();
-        return (sval("=="), $expr_r);
-
-    } elsif (Token::is($t, "sym", "!=")) {
-        consume_sym("!=");
-        $expr_r = parse_expr();
-        return (sval("!="), $expr_r);
-
+        return (sval($op), $expr_r);
     } else {
         return ();
     }
