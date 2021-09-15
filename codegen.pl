@@ -305,7 +305,6 @@ sub gen_while {
     my $label_id = get_label_id();
     my $label_begin = "while_$label_id";
     my $label_end = "end_while_$label_id";
-    my $label_true = "true_$label_id";
 
     printf("\n");
 
@@ -339,7 +338,6 @@ sub gen_case {
     my $when_idx = -1;
 
     my $label_end = "end_case_${label_id}";
-    my $label_when_head = "when_${label_id}";
     my $label_end_when_head = "end_when_${label_id}";
 
     printf("\n");
